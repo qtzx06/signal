@@ -1,24 +1,37 @@
 import { useEffect, useRef, useMemo } from 'react';
 
-// SIGNAL pattern - 5 rows for the letters
+// SIGNAL pattern - block ASCII art font
 const SIGNAL_PATTERN = [
-  ' ███  █  ███  █   █  ███  █     ',
-  '█     █ █     ██  █ █   █ █     ',
-  ' ██   █ █  ██ █ █ █ █████ █     ',
-  '   █  █ █   █ █  ██ █   █ █     ',
-  '███   █  ███  █   █ █   █ █████ ',
+  '███████╗██╗ ██████╗ ███╗   ██╗ █████╗ ██╗     ',
+  '██╔════╝██║██╔════╝ ████╗  ██║██╔══██╗██║     ',
+  '███████╗██║██║  ███╗██╔██╗ ██║███████║██║     ',
+  '╚════██║██║██║   ██║██║╚██╗██║██╔══██║██║     ',
+  '███████║██║╚██████╔╝██║ ╚████║██║  ██║███████╗',
+  '╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝',
 ];
 
 const PATTERN_WIDTH = SIGNAL_PATTERN[0].length;
 
+interface Cell {
+  col: number;
+  row: number;
+  x: number;
+  y: number;
+  char: string;
+  alpha: number;
+  delay: number;
+  phase: number;
+}
+
 export default function AsciiGrid() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationRef = useRef<number>(0);
+  const cellsRef = useRef<Cell[]>([]);
   const startTimeRef = useRef<number>(0);
 
   const gridConfig = useMemo(() => {
-    const cellSize = 10;
-    const gap = 2;
+    const cellSize = 11;
+    const gap = 0;
     return { cellSize, gap };
   }, []);
 
@@ -37,33 +50,60 @@ export default function AsciiGrid() {
     canvas.width = width;
     canvas.height = height;
 
+    // Only create cells for SIGNAL letters
+    const cells: Cell[] = [];
+
+    for (let row = 0; row < SIGNAL_PATTERN.length; row++) {
+      for (let col = 0; col < PATTERN_WIDTH; col++) {
+        const char = SIGNAL_PATTERN[row][col];
+        if (char !== ' ') {
+          cells.push({
+            col,
+            row,
+            x: col * totalWidth,
+            y: row * totalWidth,
+            char: char,
+            alpha: 1,
+            delay: 0,
+            phase: Math.random() * Math.PI * 2,
+          });
+        }
+      }
+    }
+
+    cellsRef.current = cells;
     startTimeRef.current = performance.now();
 
     const animate = (currentTime: number) => {
+      const elapsed = currentTime - startTimeRef.current;
       const time = currentTime * 0.001;
 
       ctx.clearRect(0, 0, width, height);
 
-      // Draw glowing brightness mask for SIGNAL
-      for (let row = 0; row < SIGNAL_PATTERN.length; row++) {
-        for (let col = 0; col < PATTERN_WIDTH; col++) {
-          if (SIGNAL_PATTERN[row][col] !== ' ') {
-            const x = col * totalWidth + cellSize / 2;
-            const y = row * totalWidth + cellSize / 2;
+      for (const cell of cellsRef.current) {
+        // Pulsing glow
+        const pulse = 0.85 + Math.sin(time * 2.5 + cell.col * 0.15 + cell.phase) * 0.15;
+        const burn = pulse * cell.alpha;
 
-            // Pulsing intensity
-            const pulse = 0.7 + Math.sin(time * 2 + col * 0.1 + row * 0.2) * 0.3;
+        // White-hot cyan
+        const r = Math.floor(150 + 105 * burn);
+        const g = Math.floor(240 + 15 * burn);
+        const b = 255;
 
-            // Create radial gradient for soft glow
-            const gradient = ctx.createRadialGradient(x, y, 0, x, y, cellSize * 1.2);
-            gradient.addColorStop(0, `rgba(200, 255, 255, ${0.9 * pulse})`);
-            gradient.addColorStop(0.5, `rgba(100, 220, 255, ${0.5 * pulse})`);
-            gradient.addColorStop(1, `rgba(0, 150, 255, 0)`);
+        ctx.shadowColor = `rgba(0, 255, 255, ${0.9 * burn})`;
+        ctx.shadowBlur = 8 + 6 * burn;
 
-            ctx.fillStyle = gradient;
-            ctx.fillRect(x - cellSize, y - cellSize, cellSize * 2, cellSize * 2);
-          }
-        }
+        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${burn})`;
+        ctx.font = `bold ${cellSize}px "Courier New", monospace`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+
+        ctx.fillText(cell.char, cell.x + cellSize / 2, cell.y + cellSize / 2);
+
+        // Extra white core
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = `rgba(255, 255, 255, ${burn * 0.4})`;
+        ctx.fillText(cell.char, cell.x + cellSize / 2, cell.y + cellSize / 2);
       }
 
       animationRef.current = requestAnimationFrame(animate);

@@ -46,28 +46,15 @@ body {
   left: 0 !important;
 }
 
-/* Bright layer masked to SIGNAL shape */
-.video-bright {
+/* SIGNAL ASCII overlay */
+.signal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 1;
-  overflow: hidden;
-  mask: url(#signal-mask);
-  -webkit-mask: url(#signal-mask);
-}
-
-.video-bright > div,
-.video-bright canvas {
-  min-width: 100vw !important;
-  min-height: 100vh !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
+  top: 35%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  mix-blend-mode: screen;
+  pointer-events: none;
 }
 
 .scanlines {
