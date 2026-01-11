@@ -74,15 +74,15 @@
   width: 24px;
 }
 
-/* Mobile - bars disappear after intro, come back on scroll */
-@media (max-width: 768px) {
-  .portal-container.loaded .panel-top,
-  .portal-container.loaded .panel-bottom {
-    height: 0;
-  }
+/* Mobile overlay - simple white fade */
+.mobile-overlay {
+  position: absolute;
+  inset: 0;
+  background: #ffffff;
+  opacity: 1;
+  transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-  .portal-container.loaded .panel-left,
-  .portal-container.loaded .panel-right {
-    width: 0;
-  }
+.mobile-overlay.loaded {
+  opacity: 0;
 }

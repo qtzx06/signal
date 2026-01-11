@@ -7,10 +7,12 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function BackgroundBoxes() {
   const [loaded, setLoaded] = useState(false);
+  const [isMobile] = useState(() => window.innerWidth <= 768);
   const topRef = useRef<HTMLDivElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const leftRef = useRef<HTMLDivElement>(null);
   const rightRef = useRef<HTMLDivElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => setLoaded(true), 100);
@@ -23,61 +25,52 @@ export default function BackgroundBoxes() {
     // Wait for page to become scrollable (3s) before setting up GSAP
     const setupTimer = setTimeout(() => {
       window.scrollTo(0, 0);
-      const panels = [topRef.current, bottomRef.current, leftRef.current, rightRef.current];
-      if (panels.some(p => !p)) return;
 
-      // Remove CSS transitions so GSAP has full control
-      // Also ensure solid white background
-      panels.forEach(p => {
-        if (p) {
-          p.style.transition = 'none';
-          p.style.backgroundColor = '#ffffff';
-          p.style.opacity = '1';
-        }
-      });
+      if (isMobile) {
+        // Mobile: just set up scroll animation for overlay fade in
+        requestAnimationFrame(() => {
+          ScrollTrigger.refresh();
 
-      requestAnimationFrame(() => {
-        ScrollTrigger.refresh();
+          gsap.timeline({
+            scrollTrigger: {
+              trigger: document.body,
+              start: 'top top',
+              end: 'bottom bottom',
+              scrub: 0.5,
+            },
+          })
+          .fromTo(
+            overlayRef.current,
+            { opacity: 0 },
+            { opacity: 1, ease: 'none' },
+            0
+          );
+        });
+      } else {
+        // Desktop: panels animation
+        const panels = [topRef.current, bottomRef.current, leftRef.current, rightRef.current];
+        if (panels.some(p => !p)) return;
 
-        const isMobile = window.innerWidth <= 768;
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: document.body,
-            start: 'top top',
-            end: 'bottom bottom',
-            scrub: 0.5,
-          },
+        panels.forEach(p => {
+          if (p) {
+            p.style.transition = 'none';
+            p.style.backgroundColor = '#ffffff';
+            p.style.opacity = '1';
+          }
         });
 
-        if (isMobile) {
-          // Mobile: expand from nothing (fully opaque)
-          tl.fromTo(
-            topRef.current,
-            { height: '0px' },
-            { height: '50vh', ease: 'none' },
-            0
-          )
+        requestAnimationFrame(() => {
+          ScrollTrigger.refresh();
+
+          gsap.timeline({
+            scrollTrigger: {
+              trigger: document.body,
+              start: 'top top',
+              end: 'bottom bottom',
+              scrub: 0.5,
+            },
+          })
           .fromTo(
-            bottomRef.current,
-            { height: '0px' },
-            { height: '50vh', ease: 'none' },
-            0
-          )
-          .fromTo(
-            leftRef.current,
-            { width: '0px' },
-            { width: '50vw', ease: 'none' },
-            0
-          )
-          .fromTo(
-            rightRef.current,
-            { width: '0px' },
-            { width: '50vw', ease: 'none' },
-            0
-          );
-        } else {
-          // Desktop: expand from 24px bars
-          tl.fromTo(
             topRef.current,
             { height: '24px' },
             { height: '50vh', ease: 'none' },
@@ -101,13 +94,23 @@ export default function BackgroundBoxes() {
             { width: '50vw', ease: 'none' },
             0
           );
-        }
-      });
+        });
+      }
     }, 3000);
 
     return () => clearTimeout(setupTimer);
-  }, [loaded]);
+  }, [loaded, isMobile]);
 
+  // Mobile: simple white overlay that fades out on intro, fades in on scroll
+  if (isMobile) {
+    return (
+      <div className="portal-container">
+        <div className={`mobile-overlay ${loaded ? 'loaded' : ''}`} ref={overlayRef} />
+      </div>
+    );
+  }
+
+  // Desktop: panels
   return (
     <div className={`portal-container ${loaded ? 'loaded' : ''}`}>
       <div className="panel panel-top" ref={topRef} />
