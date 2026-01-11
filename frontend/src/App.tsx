@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Video2Ascii from 'video2ascii';
 import BackgroundBoxes from './components/BackgroundBoxes';
 import AsciiGrid from './components/AsciiGrid';
+import { Boxes } from './components/ui/background-boxes';
 import './App.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -12,6 +13,7 @@ function App() {
   const appRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLDivElement>(null);
   const signalRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLDivElement>(null);
   const [numColumns] = useState(() => {
     const isMobile = window.innerWidth <= 768;
     return isMobile ? 200 : 150;
@@ -27,16 +29,28 @@ function App() {
       requestAnimationFrame(() => {
         ScrollTrigger.refresh();
 
-        gsap.timeline({
+        const tl = gsap.timeline({
           scrollTrigger: {
             trigger: document.body,
             start: 'top top',
             end: 'bottom bottom',
-            scrub: 1.5,
+            scrub: 0.5,
           },
-        }).to(
+        });
+
+        // SIGNAL fades out
+        tl.fromTo(
           signalRef.current,
-          { filter: 'blur(20px)', opacity: 0, ease: 'none' },
+          { opacity: 1 },
+          { opacity: 0, ease: 'none' },
+          0
+        );
+
+        // Input box fades out
+        tl.fromTo(
+          inputRef.current,
+          { opacity: 1 },
+          { opacity: 0, ease: 'none' },
           0
         );
       });
@@ -69,6 +83,11 @@ function App() {
       {/* SIGNAL text centered */}
       <div className="signal-container" ref={signalRef}>
         <AsciiGrid />
+      </div>
+
+      {/* Input box in center */}
+      <div className="input-container" ref={inputRef}>
+        <Boxes />
       </div>
     </div>
   );

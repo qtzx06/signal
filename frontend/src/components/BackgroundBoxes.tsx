@@ -39,19 +39,19 @@ export default function BackgroundBoxes() {
             trigger: document.body,
             start: 'top top',
             end: 'bottom bottom',
-            scrub: 1.5,
+            scrub: 0.5,
           },
         })
         .fromTo(
           bottomRef.current,
           { height: '24px' },
-          { height: '60vh', ease: 'none' },
+          { height: '50vh', ease: 'none' },
           0
         )
         .fromTo(
           topRef.current,
           { height: '24px' },
-          { height: '40vh', ease: 'none' },
+          { height: '50vh', ease: 'none' },
           0
         )
         .fromTo(
