@@ -20,7 +20,7 @@ export default function BackgroundBoxes() {
   useEffect(() => {
     if (!loaded) return;
 
-    // Wait for CSS transition to complete before setting up GSAP
+    // Wait for page to become scrollable (3s) before setting up GSAP
     const setupTimer = setTimeout(() => {
       const panels = [topRef.current, bottomRef.current, leftRef.current, rightRef.current];
       if (panels.some(p => !p)) return;
@@ -30,45 +30,43 @@ export default function BackgroundBoxes() {
         if (p) p.style.transition = 'none';
       });
 
-      const ctx = gsap.context(() => {
-        const tl = gsap.timeline({
+      requestAnimationFrame(() => {
+        ScrollTrigger.refresh();
+
+        gsap.timeline({
           scrollTrigger: {
             trigger: document.body,
             start: 'top top',
             end: 'bottom bottom',
             scrub: 0.5,
           },
-        });
-
-        // All panels close in together with backdrop blur
-        tl.fromTo(
+        })
+        .fromTo(
           bottomRef.current,
-          { height: '24px', backdropFilter: 'blur(0px)' },
-          { height: '95vh', backdropFilter: 'blur(20px)', ease: 'power2.inOut' },
+          { height: '24px' },
+          { height: '95vh', ease: 'power2.inOut' },
           0
         )
         .fromTo(
           topRef.current,
-          { height: '24px', backdropFilter: 'blur(0px)' },
-          { height: '15vh', backdropFilter: 'blur(20px)', ease: 'power2.inOut' },
+          { height: '24px' },
+          { height: '15vh', ease: 'power2.inOut' },
           0
         )
         .fromTo(
           leftRef.current,
-          { width: '24px', backdropFilter: 'blur(0px)' },
-          { width: '50vw', backdropFilter: 'blur(20px)', ease: 'power2.inOut' },
+          { width: '24px' },
+          { width: '50vw', ease: 'power2.inOut' },
           0
         )
         .fromTo(
           rightRef.current,
-          { width: '24px', backdropFilter: 'blur(0px)' },
-          { width: '50vw', backdropFilter: 'blur(20px)', ease: 'power2.inOut' },
+          { width: '24px' },
+          { width: '50vw', ease: 'power2.inOut' },
           0
         );
       });
-
-      return () => ctx.revert();
-    }, 1400);
+    }, 3000);
 
     return () => clearTimeout(setupTimer);
   }, [loaded]);

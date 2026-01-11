@@ -11,6 +11,11 @@ html, body, #root {
 
 html {
   overflow-x: hidden;
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
 }
 
 body {

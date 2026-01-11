@@ -1,7 +1,11 @@
 .app {
   width: 100%;
-  min-height: 200vh;
+  min-height: 100vh;
   position: relative;
+}
+
+.app.scrollable {
+  min-height: 200vh;
 }
 
 /* ASCII video background */
