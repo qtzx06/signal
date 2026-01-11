@@ -16,7 +16,6 @@ function App() {
           charset="detailed"
           isPlaying={true}
           autoPlay={true}
-          loop={true}
           enableMouse={false}
           enableRipple={false}
           audioEffect={0}

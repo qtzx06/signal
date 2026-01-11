@@ -1,10 +1,7 @@
 .app {
-  width: 100vw;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
-  overflow: hidden;
+  width: 100%;
+  min-height: 200vh;
+  position: relative;
 }
 
 /* ASCII video background */
@@ -29,12 +26,12 @@
   left: 0 !important;
 }
 
-/* SIGNAL text at top */
+/* SIGNAL text at converging point */
 .signal-container {
   position: fixed;
-  top: 48px;
+  top: 15vh;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, 0);
   z-index: 20;
   pointer-events: none;
 }
