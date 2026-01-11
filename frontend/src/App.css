@@ -59,24 +59,37 @@
   }
 }
 
-/* Input container in center */
+/* Input container - floating window style */
 .input-container {
   position: fixed;
-  top: 50%;
+  bottom: -80px;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
   z-index: 20;
-  width: 500px;
-  height: 300px;
+  width: min(900px, 85vw);
+  height: 400px;
   overflow: hidden;
-  background: transparent;
+  background: rgba(20, 20, 25, 0.9);
+  border-radius: 16px 16px 0 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: none;
+  box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.5);
+}
+
+/* White overlay for transition bloom effect */
+.white-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 15;
+  pointer-events: none;
   opacity: 0;
-  animation: fadeIn 1.5s ease-out 1s forwards;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0) 70%);
 }
 
 @media (max-width: 768px) {
   .input-container {
-    width: 90vw;
-    height: 250px;
+    width: 95vw;
+    height: 350px;
+    border-radius: 12px 12px 0 0;
   }
 }

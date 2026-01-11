@@ -20,15 +20,6 @@
   transition: height 1.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.panel-bottom {
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 50vh;
-  transform-origin: bottom;
-  transition: height 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
 .panel-left {
   top: 0;
   bottom: 0;
@@ -49,10 +40,6 @@
 
 /* Loaded state - panels retract to edges */
 .portal-container.loaded .panel-top {
-  height: 24px;
-}
-
-.portal-container.loaded .panel-bottom {
   height: 24px;
 }
 
