@@ -69,27 +69,16 @@
   width: min(900px, 85vw);
   height: 400px;
   overflow: hidden;
-  background: rgba(20, 20, 25, 0.9);
+  background: rgba(10, 10, 15, 0.7);
   border-radius: 16px 16px 0 0;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.8);
   border-bottom: none;
-  box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.5);
-}
-
-/* White overlay for transition bloom effect */
-.white-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 15;
-  pointer-events: none;
-  opacity: 0;
-  background: radial-gradient(circle at center, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0) 70%);
 }
 
 @media (max-width: 768px) {
   .input-container {
-    width: 95vw;
-    height: 350px;
+    width: 85vw;
+    height: 250px;
     border-radius: 12px 12px 0 0;
   }
 }

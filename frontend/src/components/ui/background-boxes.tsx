@@ -5,7 +5,7 @@ import { motion } from "motion/react";
 export const BoxesCore = ({ className, ...rest }: { className?: string }) => {
   const rows = new Array(150).fill(1);
   const cols = new Array(100).fill(1);
-  const borderColor = '#e5e7eb';
+  const borderColor = 'rgba(255, 255, 255, 0.15)';
 
   return (
     <div
@@ -35,8 +35,11 @@ export const BoxesCore = ({ className, ...rest }: { className?: string }) => {
         >
           {cols.map((_, j) => (
             <motion.div
-              whileHover={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
+              whileHover={{ backgroundColor: 'rgba(255, 255, 255, 0.15)' }}
+              transition={{
+                duration: 0,
+                backgroundColor: { duration: 2, ease: "easeOut" }
+              }}
               key={`col` + j}
               style={{
                 position: 'relative',
@@ -44,7 +47,7 @@ export const BoxesCore = ({ className, ...rest }: { className?: string }) => {
                 width: '64px',
                 borderTop: `1px solid ${borderColor}`,
                 borderRight: `1px solid ${borderColor}`,
-                backgroundColor: '#fff',
+                backgroundColor: 'transparent',
               }}
             >
               {j % 2 === 0 && i % 2 === 0 ? (
@@ -53,7 +56,7 @@ export const BoxesCore = ({ className, ...rest }: { className?: string }) => {
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth="1.5"
-                  stroke={borderColor}
+                  stroke="rgba(255, 255, 255, 0.2)"
                   style={{
                     pointerEvents: 'none',
                     position: 'absolute',

@@ -3,12 +3,18 @@
   inset: 0;
   pointer-events: none;
   overflow: hidden;
-  z-index: 100;
+  z-index: 9999;
 }
 
 .panel {
   position: absolute;
-  background: #fff;
+  background: #fff !important;
+  background-color: #fff !important;
+  opacity: 1 !important;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  isolation: isolate;
 }
 
 .panel-top {
@@ -18,6 +24,17 @@
   height: 50vh;
   transform-origin: top;
   transition: height 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: #ffffff;
+}
+
+.panel-bottom {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50vh;
+  transform-origin: bottom;
+  transition: height 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: #ffffff;
 }
 
 .panel-left {
@@ -27,6 +44,7 @@
   width: 50vw;
   transform-origin: left;
   transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+  background-color: #ffffff;
 }
 
 .panel-right {
@@ -36,10 +54,15 @@
   width: 50vw;
   transform-origin: right;
   transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+  background-color: #ffffff;
 }
 
 /* Loaded state - panels retract to edges */
 .portal-container.loaded .panel-top {
+  height: 24px;
+}
+
+.portal-container.loaded .panel-bottom {
   height: 24px;
 }
 
@@ -49,4 +72,17 @@
 
 .portal-container.loaded .panel-right {
   width: 24px;
+}
+
+/* Mobile - bars disappear after intro, come back on scroll */
+@media (max-width: 768px) {
+  .portal-container.loaded .panel-top,
+  .portal-container.loaded .panel-bottom {
+    height: 0;
+  }
+
+  .portal-container.loaded .panel-left,
+  .portal-container.loaded .panel-right {
+    width: 0;
+  }
 }

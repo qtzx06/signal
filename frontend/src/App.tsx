@@ -14,7 +14,6 @@ function App() {
   const videoRef = useRef<HTMLDivElement>(null);
   const signalRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLDivElement>(null);
-  const whiteOverlayRef = useRef<HTMLDivElement>(null);
   const [numColumns] = useState(() => {
     const isMobile = window.innerWidth <= 768;
     return isMobile ? 200 : 150;
@@ -44,22 +43,6 @@ function App() {
           signalRef.current,
           { opacity: 1 },
           { opacity: 0, ease: 'none' },
-          0
-        );
-
-        // Input box fades out
-        tl.fromTo(
-          inputRef.current,
-          { opacity: 1 },
-          { opacity: 0, ease: 'none' },
-          0
-        );
-
-        // White overlay fades in
-        tl.fromTo(
-          whiteOverlayRef.current,
-          { opacity: 0 },
-          { opacity: 1, ease: 'power2.in' },
           0
         );
       });
@@ -98,9 +81,6 @@ function App() {
       <div className="input-container" ref={inputRef}>
         <Boxes />
       </div>
-
-      {/* White overlay for transition */}
-      <div className="white-overlay" ref={whiteOverlayRef} />
     </div>
   );
 }
