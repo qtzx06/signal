@@ -4,16 +4,13 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Video2Ascii from 'video2ascii';
 import BackgroundBoxes from './components/BackgroundBoxes';
 import AsciiGrid from './components/AsciiGrid';
-import { Boxes } from './components/ui/background-boxes';
 import './App.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
 function App() {
   const appRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLDivElement>(null);
   const signalRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLDivElement>(null);
   const [numColumns] = useState(() => {
     const isMobile = window.innerWidth <= 768;
     return isMobile ? 200 : 150;
@@ -54,7 +51,7 @@ function App() {
   return (
     <div className="app" ref={appRef}>
       {/* ASCII video background */}
-      <div className="video-bg" ref={videoRef}>
+      <div className="video-bg">
         <Video2Ascii
           src="/matrix.mp4"
           numColumns={numColumns}
@@ -69,17 +66,12 @@ function App() {
         />
       </div>
 
-      {/* Portal panels */}
+      {/* White bars */}
       <BackgroundBoxes />
 
-      {/* SIGNAL text centered */}
+      {/* SIGNAL title */}
       <div className="signal-container" ref={signalRef}>
         <AsciiGrid />
-      </div>
-
-      {/* Input box in center */}
-      <div className="input-container" ref={inputRef}>
-        <Boxes />
       </div>
     </div>
   );

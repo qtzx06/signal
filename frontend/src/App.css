@@ -59,26 +59,3 @@
   }
 }
 
-/* Input container - floating window style */
-.input-container {
-  position: fixed;
-  bottom: -80px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 20;
-  width: min(900px, 85vw);
-  height: 400px;
-  overflow: hidden;
-  background: rgba(10, 10, 15, 0.7);
-  border-radius: 16px 16px 0 0;
-  border: 2px solid rgba(255, 255, 255, 0.8);
-  border-bottom: none;
-}
-
-@media (max-width: 768px) {
-  .input-container {
-    width: 85vw;
-    height: 250px;
-    border-radius: 12px 12px 0 0;
-  }
-}
