@@ -27,11 +27,11 @@ function App() {
             trigger: document.body,
             start: 'top top',
             end: 'bottom bottom',
-            scrub: 0.5,
+            scrub: 1.5,
           },
         }).to(
           signalRef.current,
-          { filter: 'blur(20px)', opacity: 0, ease: 'power2.inOut' },
+          { filter: 'blur(20px)', opacity: 0, ease: 'none' },
           0
         );
       });

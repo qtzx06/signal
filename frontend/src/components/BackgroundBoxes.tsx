@@ -38,31 +38,31 @@ export default function BackgroundBoxes() {
             trigger: document.body,
             start: 'top top',
             end: 'bottom bottom',
-            scrub: 0.5,
+            scrub: 1.5,
           },
         })
         .fromTo(
           bottomRef.current,
           { height: '24px' },
-          { height: '60vh', ease: 'power2.inOut' },
+          { height: '60vh', ease: 'none' },
           0
         )
         .fromTo(
           topRef.current,
           { height: '24px' },
-          { height: '40vh', ease: 'power2.inOut' },
+          { height: '40vh', ease: 'none' },
           0
         )
         .fromTo(
           leftRef.current,
           { width: '24px' },
-          { width: '50vw', ease: 'power2.inOut' },
+          { width: '50vw', ease: 'none' },
           0
         )
         .fromTo(
           rightRef.current,
           { width: '24px' },
-          { width: '50vw', ease: 'power2.inOut' },
+          { width: '50vw', ease: 'none' },
           0
         );
       });
