@@ -21,14 +21,25 @@
 
 .video-bg > div,
 .video-bg canvas {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: auto !important;
+  height: auto !important;
   min-width: 100vw !important;
   min-height: 100vh !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
+  object-fit: cover !important;
 }
+
+@media (max-width: 768px) and (orientation: portrait) {
+  .video-bg > div,
+  .video-bg canvas {
+    min-width: 180vh !important;
+    min-height: 100vh !important;
+  }
+}
+
 
 /* SIGNAL text at converging point */
 .signal-container {

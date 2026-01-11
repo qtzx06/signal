@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Video2Ascii from 'video2ascii';
@@ -12,6 +12,10 @@ function App() {
   const appRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLDivElement>(null);
   const signalRef = useRef<HTMLDivElement>(null);
+  const [numColumns] = useState(() => {
+    const isMobile = window.innerWidth <= 768;
+    return isMobile ? 200 : 150;
+  });
 
   useEffect(() => {
     // After 3 seconds: expand page, then set up GSAP
@@ -46,7 +50,7 @@ function App() {
       <div className="video-bg" ref={videoRef}>
         <Video2Ascii
           src="/matrix.mp4"
-          numColumns={150}
+          numColumns={numColumns}
           colored={true}
           brightness={1.2}
           charset="detailed"
