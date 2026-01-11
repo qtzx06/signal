@@ -1,0 +1,65 @@
+.portal-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 10;
+}
+
+.panel {
+  position: absolute;
+  background: #fff;
+}
+
+.panel-top {
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50vh;
+  transform-origin: top;
+  transition: height 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.panel-bottom {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50vh;
+  transform-origin: bottom;
+  transition: height 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.panel-left {
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 50vw;
+  transform-origin: left;
+  transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+}
+
+.panel-right {
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 50vw;
+  transform-origin: right;
+  transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+}
+
+/* Loaded state - panels retract to edges */
+.portal-container.loaded .panel-top {
+  height: 24px;
+}
+
+.portal-container.loaded .panel-bottom {
+  height: 24px;
+}
+
+.portal-container.loaded .panel-left {
+  width: 24px;
+}
+
+.portal-container.loaded .panel-right {
+  width: 24px;
+}
