@@ -1,13 +1,15 @@
 import { useEffect, useRef, useMemo } from 'react';
 
-// SIGNAL pattern - 7 rows (GitHub days) by width to spell SIGNAL
+// SIGNAL pattern - 5 rows for the letters
 const SIGNAL_PATTERN = [
-  '  ███  █  ███  █   █  ███  █      ',
-  ' █     █ █     ██  █ █   █ █      ',
-  '  ██   █ █  ██ █ █ █ █████ █      ',
-  '    █  █ █   █ █  ██ █   █ █      ',
-  ' ███   █  ███  █   █ █   █ █████  ',
+  ' ███  █  ███  █   █  ███  █     ',
+  '█     █ █     ██  █ █   █ █     ',
+  ' ██   █ █  ██ █ █ █ █████ █     ',
+  '   █  █ █   █ █  ██ █   █ █     ',
+  '███   █  ███  █   █ █   █ █████ ',
 ];
+
+const PATTERN_WIDTH = SIGNAL_PATTERN[0].length;
 
 interface Cell {
   col: number;
@@ -23,7 +25,7 @@ interface Cell {
   phase: number;
 }
 
-const ASCII_CHARS = ['·', ':', '░', '▒', '▓', '█', '0', '1'];
+const ASCII_CHARS = ['·', '░', '▒', '▓', '█', '0', '1'];
 
 export default function AsciiGrid() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -54,19 +56,24 @@ export default function AsciiGrid() {
     canvas.width = width;
     canvas.height = height;
 
+    // Center the pattern
+    const patternOffsetX = Math.floor((cols - PATTERN_WIDTH) / 2);
+    const patternOffsetY = Math.floor((rows - SIGNAL_PATTERN.length) / 2);
+
     // Initialize cells
     const cells: Cell[] = [];
-    const patternOffset = 9; // Center SIGNAL in the grid
 
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < cols; col++) {
-        const patternCol = col - patternOffset;
+        const patternCol = col - patternOffsetX;
+        const patternRow = row - patternOffsetY;
+
         const isSignal =
-          row >= 1 &&
-          row <= 5 &&
+          patternRow >= 0 &&
+          patternRow < SIGNAL_PATTERN.length &&
           patternCol >= 0 &&
-          patternCol < SIGNAL_PATTERN[0].length &&
-          SIGNAL_PATTERN[row - 1]?.[patternCol] === '█';
+          patternCol < PATTERN_WIDTH &&
+          SIGNAL_PATTERN[patternRow][patternCol] !== ' ';
 
         const baseIntensity = isSignal
           ? 1.0
@@ -93,7 +100,7 @@ export default function AsciiGrid() {
 
     const animate = (currentTime: number) => {
       const elapsed = currentTime - startTimeRef.current;
-      const time = currentTime * 0.001; // Convert to seconds
+      const time = currentTime * 0.001;
 
       ctx.clearRect(0, 0, width, height);
 
@@ -110,32 +117,27 @@ export default function AsciiGrid() {
           cell.alpha = Math.min(cell.alpha + 0.03, cell.targetAlpha);
         }
 
-        // Calculate wave effect - ripples from center-left to right
+        // Calculate wave effect
         const waveX = cell.col * waveLength - time * waveSpeed;
         const waveY = cell.row * waveLength * 0.5;
         const wave = Math.sin(waveX + waveY + cell.phase) * waveAmplitude;
-
-        // Pulse effect that travels across the grid
         const pulse = 0.8 + wave * 0.2;
 
         let r: number, g: number, b: number, alpha: number;
 
         if (cell.isSignal) {
-          // SIGNAL burns bright - intense cyan/white glow
+          // SIGNAL burns bright
           const signalPulse = 0.85 + Math.sin(time * 2 + cell.col * 0.1) * 0.15;
           const burn = signalPulse * pulse;
 
-          // White-hot core fading to cyan
           r = Math.floor(100 + 155 * burn);
           g = Math.floor(220 + 35 * burn);
           b = 255;
           alpha = cell.alpha * burn;
 
-          // Draw glow layer first
           ctx.shadowColor = `rgba(0, 220, 255, ${0.9 * burn})`;
           ctx.shadowBlur = 12 + 8 * burn;
         } else {
-          // Background cells - dim blue with wave
           const intensity = cell.baseIntensity * pulse;
           r = Math.floor(5 + 15 * intensity);
           g = Math.floor(30 + 50 * intensity);
@@ -149,14 +151,12 @@ export default function AsciiGrid() {
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
 
-        // Occasional character change for Matrix effect
         if (Math.random() < 0.005) {
           cell.char = ASCII_CHARS[Math.floor(Math.random() * ASCII_CHARS.length)];
         }
 
         ctx.fillText(cell.char, cell.x + cellSize / 2, cell.y + cellSize / 2);
 
-        // Extra bright pass for SIGNAL
         if (cell.isSignal) {
           ctx.shadowBlur = 0;
           ctx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.3})`;
