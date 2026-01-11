@@ -44,13 +44,13 @@ export default function BackgroundBoxes() {
         .fromTo(
           bottomRef.current,
           { height: '24px' },
-          { height: '95vh', ease: 'power2.inOut' },
+          { height: '60vh', ease: 'power2.inOut' },
           0
         )
         .fromTo(
           topRef.current,
           { height: '24px' },
-          { height: '15vh', ease: 'power2.inOut' },
+          { height: '40vh', ease: 'power2.inOut' },
           0
         )
         .fromTo(
