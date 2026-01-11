@@ -20,6 +20,7 @@ function App() {
   useEffect(() => {
     // After 3 seconds: expand page, then set up GSAP
     const timer = setTimeout(() => {
+      window.scrollTo(0, 0);
       appRef.current?.classList.add('scrollable');
 
       // Give DOM time to update, then set up ScrollTrigger

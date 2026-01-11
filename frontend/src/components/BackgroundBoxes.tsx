@@ -22,6 +22,7 @@ export default function BackgroundBoxes() {
 
     // Wait for page to become scrollable (3s) before setting up GSAP
     const setupTimer = setTimeout(() => {
+      window.scrollTo(0, 0);
       const panels = [topRef.current, bottomRef.current, leftRef.current, rightRef.current];
       if (panels.some(p => !p)) return;
 
